@@ -42,29 +42,26 @@ import java.lang.ref.WeakReference;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
-public class MainActivity extends baseActivity
+public class ContractorActivity extends baseActivity
         implements NavigationView.OnNavigationItemSelectedListener , PicassoSingleton.PicassoCallbacksInterface {
 
     private TextView mUsernameEdit;
     private ImageView mUserPicture;
 
-    public user userLogado = new user();
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-    }
+    public user userLogado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_contractor);
+
+        Intent intent = getIntent();
+        userLogado = (user) intent.getSerializableExtra("com.rogacheski.lbd.lbdmusic.USER");
+
+        mContext = ContractorActivity.this;
+        session = new Session(mContext);
 
         ButterKnife.bind(this);
-
-        TAG = "MainActivity";
-        mContext = MainActivity.this;
-        session = new Session(mContext);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -83,21 +80,14 @@ public class MainActivity extends baseActivity
         mUsernameEdit = (TextView)header.findViewById(R.id.username);
         mUserPicture = (ImageView)header.findViewById(R.id.drawer_profilePicture);
 
-        if(!CheckUserLogado()) {
+        if(userLogado.getType().equals("musician")) {
             TransitionRight(LoginActivity.class);
-        } else {
-            if(!session.gettype().equals("contractor")) {
-                TransitionRightExtraId(ProfileMusicianActivity.class , "id" , session.getid());
-            } else {
-                loadContractor();
-            }
         }
-
 
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round);
         ActivityManager.TaskDescription tDesk = new ActivityManager.TaskDescription(getString(R.string.app_name),bm,getResources().getColor(R.color.colorPrimaryDark));
         this.setTaskDescription(tDesk);
-        //getWindow().setBackgroundDrawableResource(R.color.white);
+        getWindow().setBackgroundDrawableResource(R.color.white);
     }
 
     @Override
@@ -111,7 +101,7 @@ public class MainActivity extends baseActivity
             startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(startMain);
             //super.onBackPressed();
-            }
+        }
     }
 
     @Override
@@ -156,84 +146,6 @@ public class MainActivity extends baseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public void loadContractor() {
-        WriteLog("Iniciando UserLogado");
-
-        ShowDialog();
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://www.lbd.bravioseguros.com.br/userrest/email/"+session.getusename(),new JsonHttpResponseHandler() {
-
-            @Override
-            public void onStart() {
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                // called when response HTTP status is "200 OK"
-                try {
-                    JSONObject dataJson= (JSONObject) response.get("data");
-                    String id = dataJson.get("idUsuario").toString();
-                    String type = (String) response.get("type");
-                    String email = (String) response.get("email");
-                    WriteLog(type);
-                    if(!id.equals("false")) {
-                        DismissDialog();
-                        userLogado.setEmail(email);
-                        userLogado.setFantasyName(dataJson.get("fantasyName").toString());
-                        userLogado.setFName(dataJson.get("firstName").toString());
-                        userLogado.setLName(dataJson.get("lastName").toString());
-                        userLogado.setPicture(dataJson.get("profileImage").toString());
-                        userLogado.setType(type);
-                        session.settype(type);
-                        if(type.equals("musician")) {
-                            userLogado.setBackpicture(dataJson.get("backpicture").toString());
-                        } else {
-                            userLogado.setDocument(dataJson.get("identDocument").toString());
-                        }
-                        mUsernameEdit.setText(userLogado.getFantasyName());
-                        PicassoSingleton.getInstance(new WeakReference<>(mContext), new WeakReference<PicassoSingleton.PicassoCallbacksInterface>(MainActivity.this))
-                                .setProfilePictureAsync(mUserPicture, userLogado.getPicture(),getDrawable(R.drawable.ic_account_circle_white));
-
-
-                        /** Após terminar de carregar o userLogado do contratante, chame a tela do contratante*/
-                        Intent intent = new Intent(mContext, ContractorActivity.class);
-                        intent.putExtra("com.rogacheski.lbd.lbdmusic.USER", userLogado);
-                        startActivity(intent);
-                        //overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
-
-
-                    } else {
-                        DismissDialog();
-                        session.setusename("");
-                        TransitionLeft(LoginActivity.class);
-                    }
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    DismissDialog();
-                    session.setusename("");
-                    TransitionLeft(LoginActivity.class);
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                DismissDialog();
-                WriteMessage("No Internet Connection!","long");
-                session.setusename("");
-                TransitionLeft(LoginActivity.class);
-            }
-
-            @Override
-            public void onFinish() {
-
-            }
-
-        });
-
     }
 
     @Override

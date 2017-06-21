@@ -292,8 +292,9 @@
     <color name="Wisteria">#8E44AD</color>
     <color name="Carrot">#CC6600</color>
     <color name="DarkRed">#D64A4A</color>
-    <color name="BackGround">#EFEFF4</color>
+    <color name="BackGround">#181818</color>
     <color name="BlueGray">#B0BEC5</color>
     <color name="CleanGray">#EEEEEE</color>
+    <color name="BarraInferior">#121212</color>
 
 </resources>

@@ -45,4 +45,8 @@
     <dimen name="listFontSize">20sp</dimen>
     <dimen name="toolbarTextH">50dp</dimen>
 
+    <dimen name="TamanhoLupaH">40dp</dimen>
+    <dimen name="TamanhoLupaW">40dp</dimen>
+
+
 </resources>

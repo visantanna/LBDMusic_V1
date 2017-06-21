@@ -45,7 +45,8 @@
             android:name=".ProfileMusicianActivity"
             android:label="@string/title_activity_profile_musician"
             android:theme="@style/AppTheme.Transparent" />
-        <activity android:name=".searchResult"></activity>
+        <activity android:name=".searchResult" />
+        <activity android:name=".ContractorActivity"></activity>
     </application>
 
 </manifest>

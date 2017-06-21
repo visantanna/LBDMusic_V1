@@ -46,14 +46,14 @@
     <string name="sobre_nos">Sobre nós</string>
     <string name="calendario">Calendário</string>
     <string name="avaliacoes">Avaliações</string>
-    <string name ="Samba_Rock">Samba Rock</string>
-    <string name ="Samba">Samba</string>
-    <string name ="Pagode">Pagode</string>
-    <string name ="Get_in_touch">Get in touch!</string>
-    <string name ="Outros_contatos">"Outros contatos:"</string>
-    <string name ="Agenda_shows">"Agendas de Shows"</string>
-    <string name ="DigiteAqui">"Digite sua nota aqui!"</string>
-    <string name ="Salvar">" Salvar "</string>
+    <string name="Samba_Rock">Samba Rock</string>
+    <string name="Samba">Samba</string>
+    <string name="Pagode">Pagode</string>
+    <string name="Get_in_touch">Get in touch!</string>
+    <string name="Outros_contatos">"Outros contatos:"</string>
+    <string name="Agenda_shows">"Agendas de Shows"</string>
+    <string name="DigiteAqui">"Digite sua nota aqui!"</string>
+    <string name="Salvar">" Salvar "</string>
 
 
     <string name="teste">TESTE</string>
